@@ -1,0 +1,13 @@
+package se.ifmo.InfoSec;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication()
+public class InfoSecApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(InfoSecApplication.class, args);
+    }
+
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.hbm2ddl.auto">create</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5433/studs</property>
+        <property name="hibernate.connection.username">s291485</property>
+        <property name="hibernate.connection.password">qz6XMfGNKAgNOWkq</property>
+
+        <mapping class="se.ifmo.InfoSec.entities.User"/>
+    </session-factory>
+</hibernate-configuration>
