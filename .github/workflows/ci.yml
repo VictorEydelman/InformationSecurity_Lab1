@@ -23,9 +23,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        working-directory: ./InformationSecurity_Lab1/InfoSec
+        working-directory: InfoSec
         run: mvn clean install
 
       - name: Run SpotBugs
-        working-directory: ./InformationSecurity_Lab1/InfoSec
+        working-directory: InfoSec
         run: mvn spotbugs:check
