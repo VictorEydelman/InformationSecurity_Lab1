@@ -19,7 +19,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17' # Укажите нужную версию JDK
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Build with Maven
@@ -28,4 +28,15 @@ jobs:
 
       - name: Run SpotBugs
         working-directory: InfoSec
-        run: mvn spotbugs:check
+        run: mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
+
+      - name: Run OWASP Dependency-Check
+        run: mvn org.owasp.plugins:dependency-check-maven:check
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: |
+            target/spotbugsXml.xml
+            target/dependency-check-report.xml
