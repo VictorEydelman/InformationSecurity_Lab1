@@ -35,7 +35,7 @@ jobs:
         run: mvn org.owasp.plugins:dependency-check-maven:check
 
       - name: Upload Reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: reports
           path: |
