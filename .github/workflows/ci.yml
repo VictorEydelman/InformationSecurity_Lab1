@@ -31,6 +31,7 @@ jobs:
         run: mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
 
       - name: Run OWASP Dependency-Check
+        working-directory: InfoSec
         run: mvn org.owasp.plugins:dependency-check-maven:check
 
       - name: Upload Reports
