@@ -36,7 +36,7 @@ jobs:
       - name: Test with Snyk
         working-directory: InfoSec
         env:
-          SNYK_TOKEN: "bfdc3dec-da48-49b3-b6e2-05231d85c5d4"  # Убедитесь, что вы добавили токен Snyk в Secrets вашего репозитория
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --all-projects
 
       - name: Upload Reports
