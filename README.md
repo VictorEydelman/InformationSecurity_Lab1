@@ -15,10 +15,14 @@
 ## Описание мер защиты:
 
 1) Защита от SQLi:
-Для этого используется ORM Hibernate и не используется конкатенация строк.
-2) Защита от XSS: Для этого экранирую все пользовательские данные, которые возвращаются в ответах API
+Для этого используется ORM Hibernate и не используется конкатенация строк.<br>
+Реализация [UserService](https://github.com/VictorEydelman/InformationSecurity_Lab1/blob/main/InfoSec/src/main/java/se/ifmo/InfoSec/service/UserService.java)
+2) Защита от XSS: Для этого экранирую все пользовательские данные, которые возвращаются в ответах API<br>
+Реализация [функции для экранирования](https://github.com/VictorEydelman/InformationSecurity_Lab1/blob/main/InfoSec/src/main/java/se/ifmo/InfoSec/entities/Util/XSSUtil.java)
 3) Защита от Broken Authentication:
-Пользователя выдаются JWT токены, написан middleware, который проверяет JWT-токены на всех защищённых эндпоинтах и пароли шифруются с помощью bcrypt.
+   а) Пользователя выдаются JWT токены. [JWTService](https://github.com/VictorEydelman/InformationSecurity_Lab1/blob/main/InfoSec/src/main/java/se/ifmo/InfoSec/service/JWTService.java)
+   б) Написан middleware, который проверяет JWT-токены на всех защищённых эндпоинтах.[SecurityFilter](https://github.com/VictorEydelman/InformationSecurity_Lab1/blob/main/InfoSec/src/main/java/se/ifmo/InfoSec/config/SecurityFilter.java)
+   в) Пароли шифруются с помощью bcrypt. Реализация [класса шифрования и проверки bcrypt](https://github.com/VictorEydelman/InformationSecurity_Lab1/blob/main/InfoSec/src/main/java/se/ifmo/InfoSec/entities/Util/HashUtil.java)
 
 # SAST/SCA:
 
