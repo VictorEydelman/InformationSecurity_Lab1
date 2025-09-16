@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -16,39 +17,29 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
+    @Value("key")
+    private String Key;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     private <T> T extractClaim(String token, Function<Claims,T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
+        final Claims claims = Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();;
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
-    }
-
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode("zHNpSjDRjIFQIZSUKU6gtmnG6xcMJwuJ5HIrzBOpjU2UrB3");
+        byte[] keyBytes = Decoders.BASE64.decode(Key);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public boolean isTokenValid(String token, String username) {
         final String userName = extractUsername(token);
-        return (userName.equals(username) && !isTokenExpired(token));
-    }
-
-    public boolean isTokenExpired(String token) {
-        return extractClaim(token, Claims::getExpiration).before(new Date());
+        return (userName.equals(username) && !extractClaim(token, Claims::getExpiration).before(new Date()));
     }
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return generateToken(claims, username);
-    }
-
-    public String generateToken(Map<String,Object> claims, String username) {
         return Jwts.builder().setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
