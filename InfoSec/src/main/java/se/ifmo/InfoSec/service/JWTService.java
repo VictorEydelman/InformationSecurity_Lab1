@@ -17,8 +17,8 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
-    @Value("key")
-    private String Key;
+
+    private final String Key = "zHNpSjDRjIFQIZSUKU6gtmnG6xcMJwuJ5HIrzBOpjU2UrB3";
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
