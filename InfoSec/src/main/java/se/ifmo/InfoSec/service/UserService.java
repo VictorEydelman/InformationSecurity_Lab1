@@ -23,7 +23,7 @@ public class UserService {
     public void save(User user) {
         try(Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            session.persist(user);
+            session.merge(user);
             tx.commit();
         }
     }

@@ -1,0 +1,5 @@
+["2","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzU4MDA5NTU4LCJleHAiOjE3NTgxNTM1NTh9.DGX26YgaHgwNLTXEhtAZtGmdepzj4bMSA5eZ6Kwyp3A"]
+["2","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzU4MDA5NTU4LCJleHAiOjE3NTgxNTM1NTh9.DGX26YgaHgwNLTXEhtAZtGmdepzj4bMSA5eZ6Kwyp3A"]
+{"timestamp":"2025-09-16T07:59:19.180+00:00","status":400,"error":"Bad Request","path":"/api/user/login"}
+["3","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNzU4MDA5NTU5LCJleHAiOjE3NTgxNTM1NTl9.HKWAswnhv4unB1BW8_QHKsFzgv97tAvCQU4lh-Ncq_Q"]
+{"timestamp":"2025-09-16T07:59:20.064+00:00","status":400,"error":"Bad Request","path":"/api/user/login"}

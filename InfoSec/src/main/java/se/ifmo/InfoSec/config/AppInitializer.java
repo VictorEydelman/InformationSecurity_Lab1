@@ -1,4 +1,4 @@
-package se.ifmo.InfoSec.service;
+package se.ifmo.InfoSec.config;
 
 import jakarta.servlet.FilterRegistration;
 import jakarta.servlet.ServletContext;

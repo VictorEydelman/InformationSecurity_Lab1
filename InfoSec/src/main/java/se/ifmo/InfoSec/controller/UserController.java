@@ -38,7 +38,6 @@ public class UserController {
 
         if (user == null) {
             List<String> n = authntificationService.signUp(userDTO, userService, jwtService);
-            System.out.println(n);
             return ResponseEntity.ok(n);
         } else if(HashUtil.checkPassword(userDTO.getPassword(),user.getPassword())) {
             List<String> n = authntificationService.signIn(user, userService, jwtService);

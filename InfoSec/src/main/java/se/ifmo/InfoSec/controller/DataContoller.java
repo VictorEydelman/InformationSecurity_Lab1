@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.InfoSec.entities.DTO.UserDTO;
+import se.ifmo.InfoSec.entities.Hash.HashUtil;
 import se.ifmo.InfoSec.entities.User;
 import se.ifmo.InfoSec.service.JWTService;
 import se.ifmo.InfoSec.service.UserService;
@@ -23,14 +24,16 @@ public class DataContoller {
     private final JWTService jwtService;
 
     @GetMapping(value = "/getListUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<List<String>> getListUser(HttpServletRequest request, HttpServletResponse response) {
+    private ResponseEntity<List<String>> getListUser(HttpServletRequest request) {
         return new ResponseEntity<>(userService.getListUser(),HttpStatus.OK);
     }
 
     @PutMapping(value = "/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity<String> updatePassword(@RequestBody UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {
+    private ResponseEntity<String> updatePassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         User user = userService.getByUsername(jwtService.extractUsername(jwtService.resolveToken(request)));
-        user.setPassword(userDTO.getPassword());
+        String hashedPass = HashUtil.hashPassword(userDTO.getPassword());
+
+        user.setPassword(hashedPass);
         userService.save(user);
         return new ResponseEntity<>("Пароль обновлён",HttpStatus.OK);
     }

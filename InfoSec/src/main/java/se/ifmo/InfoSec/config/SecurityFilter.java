@@ -1,8 +1,9 @@
-package se.ifmo.InfoSec.service;
+package se.ifmo.InfoSec.config;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import se.ifmo.InfoSec.service.JWTService;
 
 import java.io.IOException;
 
