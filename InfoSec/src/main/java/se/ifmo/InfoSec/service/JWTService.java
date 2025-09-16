@@ -18,7 +18,6 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private final String Key = "zHNpSjDRjIFQIZSUKU6gtmnG6xcMJwuJ5HIrzBOpjU2UrB3";
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -29,7 +28,7 @@ public class JWTService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(Key);
+        byte[] keyBytes = Decoders.BASE64.decode("zHNpSjDRjIFQIZSUKU6gtmnG6xcMJwuJ5HIrzBOpjU2UrB3");
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
