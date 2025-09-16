@@ -25,14 +25,15 @@ public class DataContoller {
 
     @GetMapping(value = "/data", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<List<String>> getListUser(HttpServletRequest request) {
-        return new ResponseEntity<>(userService.getListUser(),HttpStatus.OK);
+        List<String> users = userService.getListUser();
+        users.replaceAll(XSSUtil::screening);
+        return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
     @PutMapping(value = "/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<String> updatePassword(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        User screeningUser = User.builder().password(XSSUtil.screening(userDTO.getPassword())).build();
         User user = userService.getByUsername(jwtService.extractUsername(jwtService.resolveToken(request)));
-        String hashedPass = HashUtil.hashPassword(screeningUser.getPassword());
+        String hashedPass = HashUtil.hashPassword(userDTO.getPassword());
 
         user.setPassword(hashedPass);
         userService.save(user);

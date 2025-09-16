@@ -31,14 +31,13 @@ public class UserController {
 
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<List<String>> login(@RequestBody UserDTO userDTO) throws NoSuchAlgorithmException {
-        User screeningUser = User.builder().username(XSSUtil.screening(userDTO.getUsername())).password(XSSUtil.screening(userDTO.getPassword())).build();
-        User user = userService.getByUsername(screeningUser.getUsername());
+        User user = userService.getByUsername(userDTO.getUsername());
 
         if (user == null) {
-            List<String> n = authntificationService.signUp(screeningUser, userService, jwtService);
+            List<String> n = authntificationService.signUp(userDTO, userService, jwtService);
             return ResponseEntity.ok(n);
-        } else if(HashUtil.checkPassword(screeningUser.getPassword(),user.getPassword())) {
-            List<String> n = authntificationService.signIn(user, userService, jwtService);
+        } else if(HashUtil.checkPassword(userDTO.getPassword(),user.getPassword())) {
+            List<String> n = authntificationService.signIn(user, jwtService);
             return ResponseEntity.ok(n);
         }
 

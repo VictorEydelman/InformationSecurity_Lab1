@@ -1,11 +1,10 @@
 package se.ifmo.InfoSec.entities.Util;
 
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class XSSUtil {
     public static String screening(String input){
-        if(input == null){
-            return null;
-        }
-        return input.replace("'","&#x27").replace("\"","&quot").replace("&","&amp")
-                .replace("<","&lt").replace(">","&gt");
+        return StringEscapeUtils.escapeHtml4(input);
     }
 }
