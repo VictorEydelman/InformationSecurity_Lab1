@@ -12,7 +12,6 @@ public class HibernateConfig {
     public SessionFactory sessionFactory() {
         Configuration configuration = new Configuration();
         configuration.configure();
-        System.out.println(1);
         return configuration.buildSessionFactory();
     }
 }

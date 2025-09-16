@@ -1,16 +1,13 @@
 package se.ifmo.InfoSec.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.InfoSec.entities.DTO.UserDTO;
-import se.ifmo.InfoSec.entities.Hash.HashUtil;
+import se.ifmo.InfoSec.entities.Util.HashUtil;
 import se.ifmo.InfoSec.entities.User;
+import se.ifmo.InfoSec.entities.Util.XSSUtil;
 import se.ifmo.InfoSec.service.AuthntificationService;
 import se.ifmo.InfoSec.service.JWTService;
 import se.ifmo.InfoSec.service.UserService;
@@ -34,12 +31,13 @@ public class UserController {
 
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity<List<String>> login(@RequestBody UserDTO userDTO) throws NoSuchAlgorithmException {
-        User user = userService.getByUsername(userDTO.getUsername());
+        User screeningUser = User.builder().username(XSSUtil.screening(userDTO.getUsername())).password(XSSUtil.screening(userDTO.getPassword())).build();
+        User user = userService.getByUsername(screeningUser.getUsername());
 
         if (user == null) {
-            List<String> n = authntificationService.signUp(userDTO, userService, jwtService);
+            List<String> n = authntificationService.signUp(screeningUser, userService, jwtService);
             return ResponseEntity.ok(n);
-        } else if(HashUtil.checkPassword(userDTO.getPassword(),user.getPassword())) {
+        } else if(HashUtil.checkPassword(screeningUser.getPassword(),user.getPassword())) {
             List<String> n = authntificationService.signIn(user, userService, jwtService);
             return ResponseEntity.ok(n);
         }

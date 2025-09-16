@@ -1,11 +1,9 @@
 package se.ifmo.InfoSec.service;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ifmo.InfoSec.entities.DTO.UserDTO;
-import se.ifmo.InfoSec.entities.Hash.HashUtil;
+import se.ifmo.InfoSec.entities.Util.HashUtil;
 import se.ifmo.InfoSec.entities.User;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,10 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthntificationService {
 
-    public List<String> signUp(UserDTO userDTO, UserService userService, JWTService jwtService) throws NoSuchAlgorithmException {
-        String hashedPass = HashUtil.hashPassword(userDTO.getPassword());
-        var user =  new User();
-        user.setUsername(userDTO.getUsername());
+    public List<String> signUp(User user, UserService userService, JWTService jwtService) throws NoSuchAlgorithmException {
+        String hashedPass = HashUtil.hashPassword(user.getPassword());
         user.setPassword(hashedPass);
         userService.save(user);
         List<String> result = new ArrayList<>();

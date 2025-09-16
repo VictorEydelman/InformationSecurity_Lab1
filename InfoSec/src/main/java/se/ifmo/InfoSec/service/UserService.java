@@ -27,17 +27,6 @@ public class UserService {
             tx.commit();
         }
     }
-    public User getByUsernameAndPassword(String username, String password) {
-        Session session = sessionFactory.openSession();
-        Query<User> queue = session.createQuery("FROM User WHERE username = :username and password = :password",User.class);
-        queue.setParameter("username", username);
-        queue.setParameter("password", password);
-        try {
-            return queue.getSingleResult();
-        } catch (NoResultException e){
-            return null;
-        }
-    }
     public User getByUsername(String username) {
         Session session = sessionFactory.openSession();
         Query<User> queue = session.createQuery("FROM User WHERE username = :username",User.class);
