@@ -189,7 +189,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/spotbugs</outputDirectory>
+                    <outputDirectory>target/spotbugs</outputDirectory>
                     <xmlOutput>true</xmlOutput>
                 </configuration>
             </plugin>
