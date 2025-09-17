@@ -26,21 +26,18 @@ jobs:
         working-directory: InfoSec
         run: mvn clean install
 
-      - name: Run SpotBugs
-        run: mvn spotbugs:check
-
-      - name: Generate SpotBugs report
-        run: mvn spotbugs:spotbugs
-
-      - name: List SpotBugs output
-        run: ls target/spotbugs
-
+      - name: Build with Maven
+        run: mvn -B verify spotbugs:spotbugs
+      - uses: lcollins/spotbugs-github-action@v4
+        with:
+         path: '**/spotbugsXml.xml'
 
       - name: Upload SpotBugs report
         uses: actions/upload-artifact@v4
         with:
          name: spotbugs-report
          path: target/spotbugs/spotbugsXml.xml
+
       - name: Install Snyk CLI
         run: npm install -g snyk
 

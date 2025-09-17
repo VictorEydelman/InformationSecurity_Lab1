@@ -189,7 +189,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <xmlOutput>true</xmlOutput>
+                    <htmlOutput>true</htmlOutput>
                 </configuration>
             </plugin>
             <plugin>
