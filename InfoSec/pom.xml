@@ -188,8 +188,14 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <htmlOutput>true</htmlOutput>
+                </configuration>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
         </plugins>
     </build>
 
