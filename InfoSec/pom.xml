@@ -181,18 +181,17 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.4.2</version>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/spotbugs</outputDirectory>
-                    <xmlOutput>true</xmlOutput>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
-                            <goal>spotbugs</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/spotbugs</outputDirectory>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
