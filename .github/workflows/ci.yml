@@ -27,33 +27,27 @@ jobs:
         run: mvn clean install
 
       - name: Run SpotBugs
-        working-directory: InfoSec
-        run: mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
+        run: mvn spotbugs:check
 
+      - name: Generate SpotBugs report
+        run: mvn spotbugs:spotbugs
+
+      - name: List SpotBugs output
+        run: ls target/spotbugs
+
+
+      - name: Upload SpotBugs report
+        uses: actions/upload-artifact@v2
+        with:
+         name: spotbugs-report
+         path: target/spotbugs/spotbugsXml.xml
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Test with Snyk
-        working-directory: InfoSec
+      - name: Run Snyk test
+        run: snyk test --all-projects --json > snyk-report.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --all-projects
-
-      - name: Upload SpotBugs report
-        uses: actions/upload-artifact@v4
-        with:
-          name: spotbugs-report
-          path: target/spotbugs/spotbugsXml.xml
 
 
-      - name: Upload Snyk report
-        uses: actions/upload-artifact@v4
-        with:
-          name: snyk-report
-          path: snyk-report.json
-      - name: Upload Reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: |
-            target/spotbugsXml.xml
+
