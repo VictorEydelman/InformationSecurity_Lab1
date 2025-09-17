@@ -189,7 +189,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>target/spotbugs</outputDirectory>
                     <xmlOutput>true</xmlOutput>
                 </configuration>
             </plugin>
