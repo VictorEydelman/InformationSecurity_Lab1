@@ -64,7 +64,9 @@ jobs:
             if-no-files-found: warn
 
       - name: Install Snyk CLI
-        run: npm install -g snyk snyk-to-html
+        run: |
+          cd InfoSec
+          npm install -g snyk snyk-to-html
 
       - name: Run Snyk test
         env:
