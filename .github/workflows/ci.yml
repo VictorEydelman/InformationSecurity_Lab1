@@ -19,29 +19,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Change to project directory
-        run: cd InfoSec
-
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: 'InfoSec/pom.xml'
 
       - name: Build Project (compile dependencies)
-        run: mvn compile -DskipTests
+        run: |
+         cd InfoSec
+         mvn compile -DskipTests
 
-      # Шаг 1: Запуск SpotBugs и публикация результатов как SARIF
       - name: Run SpotBugs
         run: |
-          mvn spotbugs:spotbugs # Генерируем отчеты
-          mvn spotbugs:check # Проверяем на ошибки (опционально, если нужно падать при ошибках)
-        continue-on-error: true # Продолжаем работу, даже если SpotBugs нашел проблемы
+          cd InfoSec
+          mvn spotbugs:spotbugs
+        continue-on-error: true
 
       - name: Upload SpotBugs SARIF results
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: target/spotbugs.xml # Загружаем XML-отчет в формате SARIF
+          sarif_file: InfoSec/target/spotbugs.xml
           wait-for-processing: true
 
 
