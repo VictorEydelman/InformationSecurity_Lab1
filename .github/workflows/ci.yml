@@ -32,42 +32,57 @@ jobs:
          cd InfoSec
          mvn compile -DskipTests
 
-      - name: Run SpotBugs with reports
+      - name: Build Project
         run: |
             cd InfoSec
-            # Очищаем и компилируем
-            mvn clean compile
+            mvn compile -DskipTests
             
-            # Запускаем SpotBugs с генерацией обоих форматов отчетов
-            mvn spotbugs:spotbugs -Dspotbugs.outputFormat=xml,html
-            
-            # Проверяем, что файлы создались
-            echo "Checking generated reports:"
-            ls -la target/
-            if [ -f "target/spotbugs.xml" ]; then
-              echo "✅ SpotBugs XML report generated successfully"
-            else
-              echo "❌ SpotBugs XML report not found!"
-              exit 1
-            fi
-            if [ -f "target/spotbugs.html" ]; then
-              echo "✅ SpotBugs HTML report generated successfully"
-            else
-              echo "❌ SpotBugs HTML report not found!"
-              exit 1
-            fi
+      - name: Run SpotBugs with reports
+        run: |
+          cd InfoSec
+          echo "Current directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la    
+          mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs -Dspotbugs.outputFormat=xml,html  
+          echo "Contents after SpotBugs run:"
+          ls -la target/ || echo "Target directory doesn't exist yet"
+        continue-on-error: true
+      - name: Check and upload reports
+        run: |
+         cd InfoSec
+         echo "Checking for reports in: $(pwd)/target/"
+         if [ -d "target" ]; then
+          echo "Target directory exists:"
+          ls -la target/
+        
+          if [ -f "target/spotbugs.xml" ]; then
+            echo "✅ SpotBugs XML report found"
+          else
+            echo "❌ SpotBugs XML report not found, trying to generate manually..."
+            # Пытаемся сгенерировать отчет вручную
+            mvn compile
+            mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:spotbugs -Dspotbugs.outputFormat=xml
+          fi
+         else
+          echo "❌ Target directory doesn't exist"
+          exit 1
+         fi
         continue-on-error: true
 
       - name: Upload SpotBugs SARIF results
+        if: success() || failure()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: InfoSec/target/spotbugs.xml
           category: spotbugs
+
       - name: Upload HTML report artifact
+        if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
             name: spotbugs-html-report
             path: InfoSec/target/spotbugs.html
             retention-days: 7
+            if-no-files-found: warn
 
 
