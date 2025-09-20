@@ -68,17 +68,11 @@ jobs:
           cd InfoSec
           npm install -g snyk snyk-to-html
 
-      - name: Run Snyk test
+      - name: Run Snyk and generate HTML
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          cd InfoSec
-          snyk test --file=pom.xml --severity-threshold=high --json-file=snyk-results.json || true
-
-      - name: Generate HTML report
-        run: |
-          cd InfoSec
-          snyk-to-html -i snyk-results.json -o snyk-report.html
+          snyk test --all-projects --json | snyk-to-html -o snyk-report.html
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
@@ -86,11 +80,6 @@ jobs:
           name: snyk-security-report
           path: snyk-report.html
 
-      - name: Upload JSON results
-        uses: actions/upload-artifact@v4
-        with:
-          name: snyk-json-results
-          path: snyk-results.json
 
 
 
