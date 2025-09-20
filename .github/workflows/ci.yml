@@ -44,37 +44,15 @@ jobs:
           echo "Files in directory:"
           ls -la    
           mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs -Dspotbugs.outputFormat=xml,html  
-          echo "Contents after SpotBugs run:"
-          ls -la target/ || echo "Target directory doesn't exist yet"
+          ls -la target/
         continue-on-error: true
       - name: Check and upload reports
         run: |
          cd InfoSec
-         echo "Checking for reports in: $(pwd)/target/"
-         if [ -d "target" ]; then
-          echo "Target directory exists:"
-          ls -la target/
-        
-          if [ -f "target/spotbugs.xml" ]; then
-            echo "✅ SpotBugs XML report found"
-          else
-            echo "❌ SpotBugs XML report not found, trying to generate manually..."
-            # Пытаемся сгенерировать отчет вручную
-            mvn compile
-            mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:spotbugs -Dspotbugs.outputFormat=xml
-          fi
-         else
-          echo "❌ Target directory doesn't exist"
-          exit 1
-         fi
+         ls -la target/
+         mvn compile
+         mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:spotbugs -Dspotbugs.outputFormat=xml
         continue-on-error: true
-
-      - name: Upload SpotBugs SARIF results
-        if: success() || failure()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: InfoSec/target/spotbugs.xml
-          category: spotbugs
 
       - name: Upload HTML report artifact
         if: success() || failure()
@@ -84,5 +62,34 @@ jobs:
             path: InfoSec/target/spotbugs.html
             retention-days: 7
             if-no-files-found: warn
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk snyk-to-html
+
+      - name: Run Snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          cd InfoSec
+          snyk test --file=pom.xml --severity-threshold=high --json-file=snyk-results.json || true
+
+      - name: Generate HTML report
+        run: |
+          cd InfoSec
+          snyk-to-html -i snyk-results.json -o snyk-report.html
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk-security-report
+          path: snyk-report.html
+
+      - name: Upload JSON results
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk-json-results
+          path: snyk-results.json
+
+
 
 
