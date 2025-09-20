@@ -32,15 +32,28 @@ jobs:
          cd InfoSec
          mvn compile -DskipTests
 
-      - name: Run SpotBugs with XML report
+      - name: Run SpotBugs with reports
         run: |
             cd InfoSec
+            # Очищаем и компилируем
             mvn clean compile
-            mvn spotbugs:spotbugs -Dspotbugs.outputFormat=xml
+            
+            # Запускаем SpotBugs с генерацией обоих форматов отчетов
+            mvn spotbugs:spotbugs -Dspotbugs.outputFormat=xml,html
+            
+            # Проверяем, что файлы создались
+            echo "Checking generated reports:"
+            ls -la target/
             if [ -f "target/spotbugs.xml" ]; then
-              ls -la target/spotbugs.xml
+              echo "✅ SpotBugs XML report generated successfully"
             else
-              ls -la target/
+              echo "❌ SpotBugs XML report not found!"
+              exit 1
+            fi
+            if [ -f "target/spotbugs.html" ]; then
+              echo "✅ SpotBugs HTML report generated successfully"
+            else
+              echo "❌ SpotBugs HTML report not found!"
               exit 1
             fi
         continue-on-error: true
@@ -50,6 +63,11 @@ jobs:
         with:
           sarif_file: InfoSec/target/spotbugs.xml
           category: spotbugs
-
+      - name: Upload HTML report artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: spotbugs-html-report
+            path: InfoSec/target/spotbugs.html
+            retention-days: 7
 
 
