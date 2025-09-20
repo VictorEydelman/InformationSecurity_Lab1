@@ -32,17 +32,24 @@ jobs:
          cd InfoSec
          mvn compile -DskipTests
 
-      - name: Run SpotBugs
+      - name: Run SpotBugs with XML report
         run: |
-          cd InfoSec
-          mvn spotbugs:spotbugs
+            cd InfoSec
+            mvn clean compile
+            mvn spotbugs:spotbugs -Dspotbugs.outputFormat=xml
+            if [ -f "target/spotbugs.xml" ]; then
+              ls -la target/spotbugs.xml
+            else
+              ls -la target/
+              exit 1
+            fi
         continue-on-error: true
 
       - name: Upload SpotBugs SARIF results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: InfoSec/target/spotbugs.xml
-          wait-for-processing: true
+          category: spotbugs
 
 
 
