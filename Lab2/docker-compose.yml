@@ -1,0 +1,9 @@
+version: '2'
+services:
+  jmeter:
+    container_name: jmeter
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "1099:1099"

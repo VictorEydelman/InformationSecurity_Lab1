@@ -40,8 +40,6 @@ jobs:
       - name: Run SpotBugs with reports
         run: |
           cd InfoSec
-          echo "Current directory: $(pwd)"
-          echo "Files in directory:"
           ls -la    
           mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs -Dspotbugs.outputFormat=xml,html  
           ls -la target/
