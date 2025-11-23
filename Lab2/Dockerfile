@@ -15,10 +15,8 @@ RUN yum update -y \
     && yum remove -y wget unzip \
     && yum clean all
 
-# Отключаем SSL для RMI (решение проблемы с rmi_keystore.jks)
 RUN sed -i 's/#server.rmi.ssl.disable=false/server.rmi.ssl.disable=true/' ${JMETER_HOME}/bin/jmeter.properties
 
-# Альтернативное решение: создаем пустой keystore
 RUN keytool -genkey -alias jmeter -keyalg RSA -keystore ${JMETER_HOME}/bin/rmi_keystore.jks \
     -storepass password -keypass password -dname "CN=localhost" -noprompt \
     || echo "Keystore creation failed, using SSL disable method"
